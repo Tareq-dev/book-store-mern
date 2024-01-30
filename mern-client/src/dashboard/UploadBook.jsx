@@ -45,6 +45,8 @@ const UploadBook = () => {
     const category = form.categoryName.value;
     const bookDescription = form.bookDescription.value;
     const bookPdfUrl = form.bookPdfUrl.value;
+    const priceString = form.price.value;
+    const price = Number(priceString);
     const bookObj = {
       bookTitle,
       authorname,
@@ -52,8 +54,8 @@ const UploadBook = () => {
       category,
       bookDescription,
       bookPdfUrl,
+      price,
     };
-    console.log(bookObj);
 
     //send data to db
     fetch("http://localhost:5000/upload-book", {
@@ -75,7 +77,7 @@ const UploadBook = () => {
       <h2 className="mb-8 text-3xl font-bold">Upload A Book</h2>
       <form
         onSubmit={handleBookSubmit}
-        className="flex lg:w-[1180px] flex-col flex-wrap gap-4"
+        className="flex lg:w-[800px] flex-col flex-wrap gap-4"
       >
         {/* {first row} */}
         <div className="flex gap-8">
@@ -154,17 +156,34 @@ const UploadBook = () => {
           />
         </div>
         {/* {Book Pdf Link} */}
-        <div>
-          <div className="mb-2 block">
-            <Label htmlFor="bookPdfUrl" value="Book PDF Url" />
+        <div className="flex justify-between gap-5">
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="bookPdfUrl" value="Book PDF Url" />
+            </div>
+            <TextInput
+              id="bookPdfUrl"
+              name="bookPdfUrl"
+              placeholder="book pdf url"
+              required
+              type="text"
+              className="w-[600px]"
+            />
           </div>
-          <TextInput
-            id="bookPdfUrl"
-            name="bookPdfUrl"
-            placeholder="book pdf url"
-            required
-            type="text"
-          />
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="Price" value="Price $" />
+            </div>
+            <TextInput
+              id="price"
+              name="price"
+              placeholder="Price $"
+              required
+              type="number"
+              className="w-40"
+              min="0"
+            />
+          </div>
         </div>
         <div>
           <Button type="submit" className="mt-5">

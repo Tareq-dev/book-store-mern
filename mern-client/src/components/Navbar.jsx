@@ -6,12 +6,18 @@ import { AuthContext } from "../contacts/AuthProvider";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Added state for dropdown
 
-  const { user } = useContext(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
 
   // toggle Menu
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  // toggle Dropdown
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
   useEffect(() => {
@@ -27,7 +33,7 @@ const Navbar = () => {
 
     // Cleanup function
     return () => {
-      window.addEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -36,9 +42,11 @@ const Navbar = () => {
     { link: "Home", path: "/" },
     { link: "About", path: "/about" },
     { link: "Shop", path: "/shop" },
-    { link: "Login", path: "/login" },
-    { link: "Sell your Book", path: "/admin/dashboard" },
     { link: "Blog", path: "/blog" },
+    {
+      link: user ? "Sell your Book" : "Login",
+      path: user ? "/admin/dashboard" : "/login",
+    },
   ];
 
   return (
@@ -48,7 +56,7 @@ const Navbar = () => {
           isSticky ? "sticky top-0 left-0 right-0 bg-blue-300" : ""
         }`}
       >
-        <div className="flex justify-between items-center text-base gap-8">
+        <div className="flex justify-between items-center text-base gap-8 relative">
           {/* logo */}
           <Link
             to="/"
@@ -70,12 +78,58 @@ const Navbar = () => {
             ))}
           </ul>
           {/*btn for lg devices */}
-          <div className="space-x-12 hidden lg:flex items-center">
-            <button>
-              <FaBarsStaggered className="w-5 hover:text-blue-700" />
-            </button>
-          </div>
+          <div className="space-x-12 hidden lg:flex items-center relative">
+            {user && (
+              <div className="relative">
+                <button
+                  onClick={toggleDropdown}
+                  className="text-white bg-blue-700 hover:bg-blue-800 outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center relative z-10"
+                >
+                  Profile
+                  <svg
+                    className={`w-2.5 h-2.5 ms-3 transform transition-transform ${
+                      isDropdownOpen ? "rotate-180" : ""
+                    }`}
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 1 4 4 4-4"
+                    />
+                  </svg>
+                </button>
+                {isDropdownOpen && (
+                  <div className="absolute left-0 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow w-32 dark:bg-gray-700">
+                    <ul
+                      className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                      aria-labelledby="dropdownDelayButton"
+                    >
+                      <li>
+                        <button className="block px-4 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                          Dashboard
+                        </button>
+                      </li>
 
+                      <li>
+                        <button
+                          onClick={logOut}
+                          className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                          Sign out
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
           <div className="md:hidden">
             <button
               onClick={toggleMenu}

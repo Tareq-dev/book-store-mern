@@ -3,7 +3,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 const cors = require("cors");
 const stripe = require("stripe")(
-  "sk_test_51OU8fJF563BZnYrDa8iTpRS92dJTBAGikHZchOwWf37vzkxU5fek2jWlJiKKUUkqrP0tauHAjfZtDBG7TNlwgA0z00ikrzZ8tB"
+  "sk_test_51L2G4sBmhlq91OcmRLrA7UPJGUGNygmgF4RNT6baEfNtItc4x72OITlT4lGFsbjNnTuykM9fAFo8H7JmQ5Hem8C000tz0Qe6mq"
 );
 
 //middleware
@@ -46,7 +46,8 @@ app.post("/create-checkout-session", async (req, res) => {
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri =
-  "mongodb+srv://mern-book-store:k2E5ixKIDWUKtXcu@cluster0.yz2y22k.mongodb.net/?retryWrites=true&w=majority";
+  "mongodb+srv://tarequedev:yHGwfxdYuKsXibtQ@cluster0.edk2dfc.mongodb.net/?retryWrites=true&w=majority";
+// "mongodb+srv://mern-book-store:k2E5ixKIDWUKtXcu@cluster0.yz2y22k.mongodb.net/?retryWrites=true&w=majority";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -129,9 +130,7 @@ async function run() {
     });
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
+    console.log("Successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();

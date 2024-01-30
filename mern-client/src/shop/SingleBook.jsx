@@ -1,44 +1,45 @@
 import React from "react";
 import { useLoaderData } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
+import { makePayment } from "./../stripe/stripe";
 
 const SingleBook = () => {
-  const { _id, bookTitle, imageUrl } = useLoaderData();
+  const { _id, bookTitle, imageUrl, price } = useLoaderData();
   const findingDetails = {
     _id,
     bookTitle,
     imageUrl,
-    price: 150
+    price,
   };
-  const makePayment = async () => {
-    const stripe = await loadStripe(
-      "pk_test_51OU8fJF563BZnYrDsG9yT5hatx5D9oey1Bj3HUKLREYuwHDw1c3JP9MW0Os4FRCEKCvxSn8gzot9ia7tQ4ExMD1p00hwYzUqqU"
-    );
-    const body = {
-      books: findingDetails,
-    };
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    const response = await fetch(
-      "http://localhost:5000/create-checkout-session",
-      {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(body),
-      }
-    );
-    const session = await response.json();
+  // const makePayment = async () => {
+  //   const stripe = await loadStripe(
+  //     "pk_test_51OU8fJF563BZnYrDsG9yT5hatx5D9oey1Bj3HUKLREYuwHDw1c3JP9MW0Os4FRCEKCvxSn8gzot9ia7tQ4ExMD1p00hwYzUqqU"
+  //   );
+  //   const body = {
+  //     books: findingDetails,
+  //   };
+  //   const headers = {
+  //     "Content-Type": "application/json",
+  //   };
+  //   const response = await fetch(
+  //     "http://localhost:5000/create-checkout-session",
+  //     {
+  //       method: "POST",
+  //       headers: headers,
+  //       body: JSON.stringify(body),
+  //     }
+  //   );
+  //   const session = await response.json();
 
-    console.log(session)
-    const result = stripe.redirectToCheckout({
-      sessionId: session.id,
-    });
-    if (result.error) {
-      console.log(result.error);
-    }
-    console.log(result);
-  };
+  //   // console.log(session);
+  //   const result = stripe.redirectToCheckout({
+  //     sessionId: session.id,
+  //   });
+  //   if (result.error) {
+  //     console.log(result.error);
+  //   }
+  //   // console.log(result);
+  // };
 
   return (
     <div className="mt-28 px-24 lg:px-24">
@@ -46,7 +47,7 @@ const SingleBook = () => {
       <h2>{bookTitle}</h2>
 
       <button
-        onClick={makePayment}
+        onClick={() => makePayment(findingDetails)}
         className="py-2 w-40 h-12 px-6 mb-4 rounded-md mt-6 bg-sky-700 hover:bg-sky-600 duration-300 text-white flex items-center justify-center overflow-hidden hover:overflow-visible relative group"
       >
         <svg
