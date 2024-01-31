@@ -16,6 +16,7 @@ import PrivateRoute from "../PrivateRoute/PrivateRoute";
 import Logout from "../components/Logout";
 import Success from './../components/Success';
 import Cancel from './../components/Cancel';
+import UsersData from './../dashboard/UsersData';
 
 const router = createBrowserRouter([
   {
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/dashboard/manage",
         element: <ManageBooks />,
+      },
+      {
+        path: "/admin/dashboard/users",
+        element: <UsersData />,
       },
       {
         path: "/admin/dashboard/edit-books/:id",

@@ -4,7 +4,7 @@ import { AuthContext } from "../contacts/AuthProvider";
 import googleLogo from "../assets/google-logo.svg";
 
 const Login = () => {
-  const { login, loginwithGoogle } = useContext(AuthContext);
+  const { login, loginWithGoogle, user: userData } = useContext(AuthContext);
   const [error, setError] = useState("");
 
   const location = useLocation();
@@ -31,19 +31,20 @@ const Login = () => {
   };
 
   //signup using google
-  const handleRegister = () => {
-    loginwithGoogle()
-      .then((result) => {
-        const user = result.user;
+  const handleRegister = async () => {
+    try {
+      const result = await loginWithGoogle();
+
+      if (!result.userExists || result.userEmail) {
         alert("Sign up successfully");
+        // If the user data was stored, you can navigate here
         navigate(from, { replace: true });
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        setError(errorMessage);
-        // ..
-      });
+      }
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      setError(errorMessage);
+    }
   };
 
   return (

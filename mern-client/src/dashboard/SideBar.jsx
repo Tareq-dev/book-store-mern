@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Sidebar } from "flowbite-react";
 import { BiBuoy } from "react-icons/bi";
 import {
@@ -13,8 +14,19 @@ import {
 import userImg from "../assets/profile.jpg";
 import { useContext } from "react";
 import { AuthContext } from "../contacts/AuthProvider";
+
 export const SideBar = () => {
+  const [allUsers, setAllUsers] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost:5000/allUsers")
+      .then((res) => res.json())
+      .then((data) => setAllUsers(data));
+  }, []);
+
   const { user } = useContext(AuthContext);
+
+  const findRole = allUsers.find((u) => u?.uid === user?.uid)?.role;
+  console.log(findRole);
   return (
     <Sidebar aria-label="Sidebar with content separator example">
       <Sidebar.Logo
@@ -30,18 +42,25 @@ export const SideBar = () => {
           <Sidebar.Item href="/admin/dashboard" icon={HiChartPie}>
             Dashboard
           </Sidebar.Item>
-          <Sidebar.Item
-            href="/admin/dashboard/upload"
-            icon={HiOutlineCloudUpload}
-          >
-            Upload Books
-          </Sidebar.Item>
-          <Sidebar.Item href="/admin/dashboard/manage" icon={HiInbox}>
-            Manage Books
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiUser}>
-            Users
-          </Sidebar.Item>
+
+          {findRole === "seller" && (
+            <Sidebar.Item
+              href="/admin/dashboard/upload"
+              icon={HiOutlineCloudUpload}
+            >
+              Upload Books
+            </Sidebar.Item>
+          )}
+          {findRole === "seller" && (
+            <Sidebar.Item href="/admin/dashboard/manage" icon={HiInbox}>
+              Manage Books
+            </Sidebar.Item>
+          )}
+          {findRole === "seller" && (
+            <Sidebar.Item href="/admin/dashboard/users" icon={HiUser}>
+              Users
+            </Sidebar.Item>
+          )}
           <Sidebar.Item href="#" icon={HiShoppingBag}>
             Products
           </Sidebar.Item>

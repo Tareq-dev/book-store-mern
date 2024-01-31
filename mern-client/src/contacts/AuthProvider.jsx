@@ -10,6 +10,9 @@ import {
   signOut,
 } from "firebase/auth";
 
+// Update the import statement in Login.jsx
+import { storeUserData, checkUserExistence } from "../utils/apiService";
+
 export const AuthContext = createContext();
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
@@ -17,15 +20,35 @@ const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  const loginwithGoogle = () => {
+  const loginWithGoogle = async () => {
     setLoading(true);
-    return signInWithPopup(auth, googleProvider);
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      // Check if user data already exists
+      const uid = user?.uid;
+      const userExists = await checkUserExistence(uid);
+  
+      if (!userExists) {
+        // Store user data if it doesn't exist
+        storeUserData(user.uid, user.displayName, user.email || "");
+        setUser(user);
+      }
+      return { userExists, userEmail: user.email }; 
+    } catch (error) {
+      console.error("Error signing in with Google:", error);
+    } finally {
+      setLoading(false);
+    }
   };
+  
+  
 
   const login = (email, password) => {
     setLoading(true);
@@ -50,7 +73,7 @@ const AuthProvider = ({ children }) => {
   const authInfo = {
     user,
     createUser,
-    loginwithGoogle,
+    loginWithGoogle,
     loading,
     login,
     logOut,
