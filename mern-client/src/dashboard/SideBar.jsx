@@ -26,7 +26,7 @@ export const SideBar = () => {
   const { user } = useContext(AuthContext);
 
   const findRole = allUsers.find((u) => u?.uid === user?.uid)?.role;
-  console.log(findRole);
+
   return (
     <Sidebar aria-label="Sidebar with content separator example">
       <Sidebar.Logo
@@ -36,6 +36,8 @@ export const SideBar = () => {
         className="w-16 h-16"
       >
         {user?.displayName || "Demo Users"}
+      {findRole && <p className="text-sm -mt-1">({findRole})</p>}
+
       </Sidebar.Logo>
       <Sidebar.Items>
         <Sidebar.ItemGroup>
