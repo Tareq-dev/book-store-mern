@@ -2,7 +2,7 @@ import { loadStripe } from "@stripe/stripe-js";
 
 export const makePayment = async (findingDetails) => {
   const stripe = await loadStripe(
-    "pk_test_51L2G4sBmhlq91OcmM28zWFxrGlcdSXj1zS8BeHVC6Wmb7hnNORKQ7MhJyVY6nDQCua0L1bhsFX3w2xB6lnp1iTGe00CFqEoh15"
+    "pk_test_51OU8fJF563BZnYrDcKmymj3RJaO1OQWZ9ov5F8RSz7Wddo8ny6JpohOw2dPJZO3UOKjdFa6rbGX3qHQ9dTcV2RZn00Vw0YIvPb"
   );
   const body = {
     books: findingDetails,

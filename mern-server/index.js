@@ -3,7 +3,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 const cors = require("cors");
 const stripe = require("stripe")(
-  "sk_test_51L2G4sBmhlq91OcmRLrA7UPJGUGNygmgF4RNT6baEfNtItc4x72OITlT4lGFsbjNnTuykM9fAFo8H7JmQ5Hem8C000tz0Qe6mq"
+  "sk_test_51OU8fJF563BZnYrDzab7eIT6z0LHNTJvWK1RtCqeb1psEdXAsVRod1yjNJy61CA7ui4PzuDV0h1SoFSmgfOEu9az00CUl6IaqD"
 );
 
 //middleware
@@ -46,7 +46,7 @@ app.post("/create-checkout-session", async (req, res) => {
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri =
-  "mongodb+srv://tarequedev:yHGwfxdYuKsXibtQ@cluster0.edk2dfc.mongodb.net/?retryWrites=true&w=majority";
+  "mongodb+srv://mern-book-store:k2E5ixKIDWUKtXcu@cluster0.yz2y22k.mongodb.net/?retryWrites=true&w=majority";
 // "mongodb+srv://mern-book-store:k2E5ixKIDWUKtXcu@cluster0.yz2y22k.mongodb.net/?retryWrites=true&w=majority";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -145,29 +145,29 @@ async function run() {
         res.status(500).send("Internal Server Error");
       }
     });
-//update user role
-// Add a new route to update the user role
-app.post("/updateUserRole", async (req, res) => {
-  const { uid, newRole } = req.body;
+    //update user role
+    // Add a new route to update the user role
+    app.post("/updateUserRole", async (req, res) => {
+      const { uid, newRole } = req.body;
 
-  try {
-    const result = await usersCollection.updateOne(
-      { uid },
-      { $set: { role: newRole } }
-    );
+      try {
+        const result = await usersCollection.updateOne(
+          { uid },
+          { $set: { role: newRole } }
+        );
 
-    if (result.modifiedCount > 0) {
-      return res.status(200).send("User role updated successfully");
-    } else {
-      return res.status(404).send("User not found");
-    }
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send("Internal Server Error");
-  }
-});
+        if (result.modifiedCount > 0) {
+          return res.status(200).send("User role updated successfully");
+        } else {
+          return res.status(404).send("User not found");
+        }
+      } catch (error) {
+        console.error(error);
+        return res.status(500).send("Internal Server Error");
+      }
+    });
 
-//Post user Data 
+    //Post user Data
     app.post("/storeUserData", (req, res) => {
       const { uid, username, email } = req.body;
       usersCollection.updateOne(
